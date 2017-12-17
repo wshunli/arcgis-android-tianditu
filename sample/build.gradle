@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.3"
     defaultConfig {
         applicationId "com.wshunli.map.tianditu.sample"
         minSdkVersion 15
@@ -30,9 +30,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.esri.arcgis.android:arcgis-android:10.2.8-1'
-    compile project(':library')
+    compile 'com.esri.arcgis.android:arcgis-android:10.2.9'
+    compile project(':tianditu')
 }
