@@ -15,3 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.wshunli.map.tianditu.TianDiTuLayer {
+    public TianDiTuLayer(int);
+    public TianDiTuLayer(int, java.lang.String);
+}
+-keep class com.wshunli.map.tianditu.TianDiTuLayerTypes { *;}
+
+
