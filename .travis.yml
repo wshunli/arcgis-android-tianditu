@@ -1,0 +1,18 @@
+language: android
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-26.0.3
+    - android-26
+    - extra-android-m2repository
+
+jdk:
+  - oraclejdk8
+
+notifications:
+  email: false
+
+script:
+  - ./gradlew assemble check
