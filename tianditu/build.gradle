@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
@@ -29,4 +30,15 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
     testImplementation 'junit:junit:4.12'
+}
+
+// jcenter configuration for novoda's bintray-release
+// $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
+publish {
+    userOrg = 'wshunli'
+    groupId = 'com.wshunli.map'
+    artifactId = 'tianditu'
+    publishVersion = '1.0.0'
+    desc = 'Library for displaying and caching tianditu layers based on ArcGIS for Android'
+    website = 'http://www.wshunli.com/'
 }

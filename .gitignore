@@ -27,6 +27,7 @@ out/
 # Gradle build files
 tianditu/build
 sample/build
+sample/release
 
 
 
