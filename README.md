@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.wshunli.map:tianditu:1.0.0'
+    compile 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
 }
 ```
 
@@ -77,6 +77,19 @@ MapView mMapView = (MapView) findViewById(R.id.map);
 TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR);
 mMapView.addLayer(vec_c);
 ```
+
+#### Cache tianditu tile layers
+
+Just specify the cache path
+
+``` Java
+MapView mMapView = (MapView) findViewById(R.id.map);
+String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTuCache";
+TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR, cachePath);
+mMapView.addLayer(vec_c);
+```
+
+File will be cached to the specified path
 
 #### More
 

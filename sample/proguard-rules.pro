@@ -15,3 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.esri.**
+-keep class com.esri.** {*;}
+
+-dontwarn org.codehaus.jackson.**
+-keep class org.codehaus.jackson.** {*;}
+
+-dontwarn jcifs.**
+-keep class jcifs.** {*;}
