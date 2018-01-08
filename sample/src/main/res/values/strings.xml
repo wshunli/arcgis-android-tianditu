@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">arcgis-android-tianditu</string>
+    <string name="map_name">天地图矢量中文标注（墨卡托）</string>
 </resources>

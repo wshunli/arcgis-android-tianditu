@@ -15,50 +15,139 @@
  */
 package com.wshunli.map.tianditu.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.esri.android.map.MapView;
-import com.esri.android.map.event.OnZoomListener;
-import com.wshunli.map.tianditu.TianDiTuLayer;
 import com.wshunli.map.tianditu.TianDiTuLayerTypes;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    protected MapView mMapView;
-    protected TianDiTuLayer vec_c, cva_c;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTuCache";
+        initData();
+        initView();
 
-        Log.d(TAG, "onCreate: " + cachePath);
-        mMapView = findViewById(R.id.map);
+    }
 
-        vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR, cachePath);
-        mMapView.addLayer(vec_c);
-        cva_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_CHINESE_MERCATOR);
-        mMapView.addLayer(cva_c);
+    private void initData() {
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mAdapter = new MapsAdapter(getData());
+    }
 
-        mMapView.setOnZoomListener(new OnZoomListener() {
-            @Override
-            public void preAction(float v, float v1, double v2) {
+    private void initView() {
+        mRecyclerView = findViewById(R.id.maps);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
+    public Map<String, int[]> getData() {
+        Map<String, int[]> maps = new TreeMap<>();
+        maps.put("天地图矢量中文标注（墨卡托）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR,
+                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_CHINESE_MERCATOR});
+        maps.put("天地图矢量英文标注（墨卡托）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR,
+                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_ENGLISH_MERCATOR});
+        maps.put("天地图影像中文标注（墨卡托）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_MERCATOR,
+                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_CHINESE_MERCATOR});
+        maps.put("天地图影像英文标注（墨卡托）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_MERCATOR,
+                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_ENGLISH_MERCATOR});
+        maps.put("天地图地形中文标注（墨卡托）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_TERRAIN_MERCATOR,
+                        TianDiTuLayerTypes.TIANDITU_TERRAIN_ANNOTATION_CHINESE_MERCATOR});
+        maps.put("天地图矢量中文标注（国家2000坐标系）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_2000,
+                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_CHINESE_2000});
+        maps.put("天地图矢量英文标注（国家2000坐标系）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_2000,
+                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_ENGLISH_2000});
+        maps.put("天地图影像中文标注（国家2000坐标系）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_2000,
+                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_CHINESE_2000});
+        maps.put("天地图影像英文标注（国家2000坐标系）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_2000,
+                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_ENGLISH_2000});
+        maps.put("天地图地形中文标注（国家2000坐标系）",
+                new int[]{TianDiTuLayerTypes.TIANDITU_TERRAIN_2000,
+                        TianDiTuLayerTypes.TIANDITU_TERRAIN_ANNOTATION_CHINESE_2000});
+        return maps;
+    }
+
+    private class MapsAdapter extends RecyclerView.Adapter<MapsAdapter.TextViewHolder> {
+        Map<String, int[]> maps = new TreeMap<>();
+        List<String> titles = new LinkedList<>();
+
+        MapsAdapter(Map<String, int[]> maps) {
+            this.maps = maps;
+            titles.addAll(maps.keySet());
+        }
+
+        @Override
+        public MapsAdapter.TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_map, parent, false);
+            return new TextViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(MapsAdapter.TextViewHolder holder, int position) {
+            holder.map_title.setText(titles.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return maps.size();
+        }
+
+        class TextViewHolder extends RecyclerView.ViewHolder {
+
+            Button map_title;
+
+            TextViewHolder(View itemView) {
+                super(itemView);
+                map_title = itemView.findViewById(R.id.map_title);
+                map_title.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String title = (String) map_title.getText();
+                        int[] layers = maps.get(
+                                maps.containsKey(title) ? title : "天地图矢量中文标注（墨卡托）");
+                        Log.d(TAG, "显示图层: " + title);
+                        Intent intent = new Intent(MainActivity.this, TianDiTuActivity.class);
+                        intent.putExtra("TIANDITU_LAYERS", layers);
+                        startActivity(intent);
+                    }
+                });
             }
-
-            @Override
-            public void postAction(float v, float v1, double v2) {
-
-                cva_c.clearTiles();
-
-            }
-        });
+        }
     }
 }
