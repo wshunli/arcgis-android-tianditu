@@ -25,7 +25,7 @@ repositories {
 }
 dependencies {
     // Add ArcGIS Runtime SDK for Android dependency
-    compile 'com.esri.arcgis.android:arcgis-android:10.2.9'
+    implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
 }
 ```
 
@@ -51,7 +51,7 @@ repositories {
 }
     // 添加 arcgis-android-tianditu 依赖
 dependencies {
-    compile 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
+    implementation 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
 }
 ```
 

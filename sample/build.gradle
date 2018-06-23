@@ -17,7 +17,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.3"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.wshunli.map.tianditu.sample"
         minSdkVersion 15
@@ -41,18 +41,18 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
 
-    compile 'com.esri.arcgis.android:arcgis-android:10.2.9'
-    compile project(':tianditu')
+    implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
+    implementation project(':tianditu')
     // arcgis-android-tianditu Dependency
     // compile 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
 }
