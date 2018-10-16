@@ -91,7 +91,11 @@ mMapView.setMap(map);
 
 File will be cached to the specified path
 
-## More
+## Screenshot
+
+![vector](screenshot/vector.jpg) | ![image](screenshot/image.jpg) | ![terrain](screenshot/terrain.jpg)
+:-: | :-: | :-:
+vector | image | terrain
 
 Find more details about arcgis-android-tianditu in [sample](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample).
 

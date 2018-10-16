@@ -5,7 +5,7 @@
 [![Author](https://img.shields.io/badge/Author-wshunli-0E7FBF.svg)](http://www.wshunli.com)
 [![GitHub license](https://img.shields.io/github/license/wshunli/arcgis-android-tianditu.svg)](https://github.com/wshunli/arcgis-android-tianditu/blob/master/LICENSE)
 
-基于 ArcGIS for Android 的天地图图层显示及缓存
+基于 ArcGIS for Android 的天地图图层显示及缓存 (10.X)
 
 [Library for displaying and caching tianditu layers based on ArcGIS for Android(English)](README.md)
 

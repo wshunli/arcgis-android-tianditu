@@ -88,7 +88,11 @@ map.getBasemap().getBaseLayers().add(vec_c);
 mMapView.setMap(map);
 ```
 
-## 更多
+## 截图
+
+![vector](screenshot/vector.jpg) | ![image](screenshot/image.jpg) | ![terrain](screenshot/terrain.jpg)
+:-: | :-: | :-:
+矢量 | 影像 | 地形
 
 更多信息可以查看 [示例](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample)
 
