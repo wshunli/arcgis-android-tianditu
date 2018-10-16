@@ -1,11 +1,11 @@
-# arcgis-android-tianditu
+# arcgis-android-tianditu (10.X)
 
 [![Download](https://api.bintray.com/packages/wshunli/maven/arcgis-android-tianditu/images/download.svg)](https://bintray.com/wshunli/maven/arcgis-android-tianditu/_latestVersion)
 [![Build Status](https://travis-ci.org/wshunli/arcgis-android-tianditu.svg?branch=master)](https://travis-ci.org/wshunli/arcgis-android-tianditu)
 [![Author](https://img.shields.io/badge/Author-wshunli-0E7FBF.svg)](http://www.wshunli.com)
 [![GitHub license](https://img.shields.io/github/license/wshunli/arcgis-android-tianditu.svg)](https://github.com/wshunli/arcgis-android-tianditu/blob/master/LICENSE)
 
-基于 ArcGIS for Android 的天地图图层显示及缓存 (10.X)
+基于 ArcGIS for Android 的天地图图层显示及缓存
 
 [Library for displaying and caching tianditu layers based on ArcGIS for Android(English)](README.md)
 

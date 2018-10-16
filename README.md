@@ -9,6 +9,10 @@ Library for displaying and caching tianditu layers based on ArcGIS for Android
 
 [基于 ArcGIS for Android 的天地图图层显示及缓存(中文版)](README_zh_CN.md)
 
+![vector](screenshot/vector.jpg) | ![image](screenshot/image.jpg) | ![terrain](screenshot/terrain.jpg)
+:-: | :-: | :-:
+vector | image | terrain
+
 ## Dependency
 
 ### ArcGIS for Android Dependency
@@ -91,11 +95,7 @@ mMapView.setMap(map);
 
 File will be cached to the specified path
 
-## Screenshot
-
-![vector](screenshot/vector.jpg) | ![image](screenshot/image.jpg) | ![terrain](screenshot/terrain.jpg)
-:-: | :-: | :-:
-vector | image | terrain
+## More
 
 Find more details about arcgis-android-tianditu in [sample](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample).
 
