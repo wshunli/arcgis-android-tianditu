@@ -17,9 +17,9 @@
 #}
 
 -keep class com.wshunli.map.tianditu.TianDiTuLayer {
-    public TianDiTuLayer(int);
-    public TianDiTuLayer(int, java.lang.String);
+    public TianDiTuLayer(com.esri.arcgisruntime.arcgisservices.TileInfo, com.esri.arcgisruntime.geometry.Envelope);
 }
 -keep class com.wshunli.map.tianditu.TianDiTuLayerTypes { *;}
+-keep class com.wshunli.map.tianditu.TianDiTuLayerBuilder { *;}
 
 

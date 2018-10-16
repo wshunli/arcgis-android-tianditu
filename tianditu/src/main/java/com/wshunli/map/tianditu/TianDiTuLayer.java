@@ -15,53 +15,39 @@
  */
 package com.wshunli.map.tianditu;
 
-import android.util.Log;
 
-import com.esri.android.map.TiledServiceLayer;
-import com.esri.core.geometry.Envelope;
-import com.esri.core.geometry.SpatialReference;
+import com.esri.arcgisruntime.arcgisservices.TileInfo;
+import com.esri.arcgisruntime.data.TileKey;
+import com.esri.arcgisruntime.geometry.Envelope;
+import com.esri.arcgisruntime.layers.ImageTiledLayer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.RejectedExecutionException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-public class TianDiTuLayer extends TiledServiceLayer {
+public class TianDiTuLayer extends ImageTiledLayer {
 
+    private static final String TAG = "TianDiTuLayer";
+
+    private int layerType = 0;
+    private String cachePath = null;
     private TianDiTuLayerInfo layerInfo;
-    private String cachePath;
 
-    public TianDiTuLayer(int layerType) {
-        super(true);
-        this.layerInfo = LayerInfoFactory.getLayerInfo(layerType);
-        this.cachePath = null;
-        this.init();
+    public TianDiTuLayer(TileInfo tileInfo, Envelope fullExtent) {
+        super(tileInfo, fullExtent);
     }
 
-    public TianDiTuLayer(int layerType, String cachePath) {
-        super(true);
-        this.layerInfo = LayerInfoFactory.getLayerInfo(layerType);
-        this.cachePath = cachePath + "/" + layerInfo.getLayerName() + "_" + layerInfo.getTileMatrixSet() + "/";
-        this.init();
-    }
+    @Override
+    protected byte[] getTile(TileKey tileKey) {
 
-    private void init() {
-        try {
-            getServiceExecutor().submit(new Runnable() {
-                public void run() {
-                    TianDiTuLayer.this.initLayer();
-                }
-            });
-        } catch (RejectedExecutionException rejectedexecutionexception) {
-            Log.e("TianDiTuLayer", "initialization of the layer failed.",
-                    rejectedexecutionexception);
-        }
-    }
-
-    protected byte[] getTile(int level, int col, int row) throws Exception {
+        int level = tileKey.getLevel();
+        int col = tileKey.getColumn();
+        int row = tileKey.getRow();
         if (level > layerInfo.getMaxZoomLevel()
                 || level < layerInfo.getMinZoomLevel())
             return new byte[0];
@@ -73,70 +59,58 @@ public class TianDiTuLayer extends TiledServiceLayer {
                     + "?service=wmts&request=gettile&version=1.0.0&layer="
                     + layerInfo.getLayerName() + "&format=tiles&tilematrixset="
                     + layerInfo.getTileMatrixSet() + "&tilecol=" + col
-                    + "&tilerow=" + row + "&tilematrix=" + (level + 1);
-            Map<String, String> map = null;
-            bytes = com.esri.core.internal.io.handler.a.a(url, map);
-            if (cachePath != null)
+                    + "&tilerow=" + row + "&tilematrix=" + (level);
+
+            try {
+                HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
+                httpConnection.setRequestMethod("GET");
+                httpConnection.setConnectTimeout(5000);
+                InputStream in = httpConnection.getInputStream();
+                bytes = getBytes(in);
+                httpConnection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (cachePath != null) {
                 AddOfflineCacheFile(cachePath, level, col, row, bytes);
+            }
+
         }
         return bytes;
     }
 
-    protected void initLayer() {
-        if (getID() == 0L) {
-            nativeHandle = create();
-            changeStatus(com.esri.android.map.event.OnStatusChangedListener.STATUS
-                    .fromInt(-1000));
-        } else {
-            this.setDefaultSpatialReference(SpatialReference.create(layerInfo
-                    .getSrid()));
-            this.setFullExtent(new Envelope(layerInfo.getxMin(), layerInfo
-                    .getyMin(), layerInfo.getxMax(), layerInfo.getyMax()));
-            this.setTileInfo(new TileInfo(layerInfo.getOrigin(), layerInfo
-                    .getScales(), layerInfo.getResolutions(), layerInfo
-                    .getScales().length, layerInfo.getDpi(), layerInfo
-                    .getTileWidth(), layerInfo.getTileHeight()));
-            super.initLayer();
-        }
-    }
 
-
-    // 将图片保存到本地 目录结构可以随便定义 只要你找得到对应的图片
-    private byte[] AddOfflineCacheFile(String cachePath, int level, int col, int row, byte[] bytes) {
+    // 保存切片到本地
+    private void AddOfflineCacheFile(String cachePath, int level, int col, int row, byte[] bytes) {
 
         File file = new File(cachePath);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        File levelfile = new File(cachePath + "/" + level);
-        if (!levelfile.exists()) {
-            levelfile.mkdirs();
-        }
-        File rowfile = new File(cachePath + "/" + level + "/" + col + "x" + row
+        if (!file.exists()) file.mkdirs();
+        File levelFile = new File(cachePath + "/" + level);
+        if (!levelFile.exists()) levelFile.mkdirs();
+        File rowFile = new File(cachePath + "/" + level + "/" + col + "x" + row
                 + ".tdt");
-        if (!rowfile.exists()) {
+
+        if (!rowFile.exists()) {
             try {
-                FileOutputStream out = new FileOutputStream(rowfile);
+                FileOutputStream out = new FileOutputStream(rowFile);
                 out.write(bytes);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        return bytes;
 
     }
 
-    // 从本地获取图片
+    // 从本地获取切片
     private byte[] getOfflineCacheFile(String cachePath, int level, int col, int row) {
         byte[] bytes = null;
-        File rowfile = new File(cachePath + "/" + level + "/" + col + "x" + row
+        File rowFile = new File(cachePath + "/" + level + "/" + col + "x" + row
                 + ".tdt");
-        if (rowfile.exists()) {
+        if (rowFile.exists()) {
             try {
-                bytes = CopySdcardbytes(rowfile);
+                FileInputStream in = new FileInputStream(rowFile);
+                bytes = getBytes(in);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else {
@@ -145,18 +119,33 @@ public class TianDiTuLayer extends TiledServiceLayer {
         return bytes;
     }
 
-    // 读取本地图片流
-    private byte[] CopySdcardbytes(File file) throws IOException {
-        FileInputStream in = new FileInputStream(file);
+    // 读取字节数组
+    private byte[] getBytes(InputStream is) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
         byte[] temp = new byte[1024];
-        int size = 0;
-        while ((size = in.read(temp)) != -1) {
+        int size;
+        while ((size = is.read(temp)) != -1) {
             out.write(temp, 0, size);
         }
-        in.close();
-        byte[] bytes = out.toByteArray();
-        return bytes;
+        is.close();
+        out.flush();
+        return out.toByteArray();
     }
 
+    public int getLayerType() {
+        return layerType;
+    }
+
+    public void setLayerType(int layerType) {
+        this.layerType = layerType;
+        this.layerInfo = LayerInfoFactory.getLayerInfo(layerType);
+    }
+
+    public String getCachePath() {
+        return cachePath;
+    }
+
+    public void setCachePath(String cachePath) {
+        this.cachePath = cachePath == null ? null : cachePath + "/" + layerInfo.getLayerName() + "_" + layerInfo.getTileMatrixSet() + "/";
+    }
 }

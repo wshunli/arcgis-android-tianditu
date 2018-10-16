@@ -25,7 +25,17 @@ repositories {
 }
 dependencies {
     // Add ArcGIS Runtime SDK for Android dependency
-    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
+    implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
+}
+```
+
+App module build.gradle file, within android block
+
+```groovy
+packagingOptions {
+    exclude 'META-INF/LGPL2.1'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/NOTICE'
 }
 ```
 
@@ -36,8 +46,12 @@ For more information : [Install and set up—ArcGIS Runtime SDK for Android](htt
 Install arcgis-android-tianditu library.
 
 ```groovy
+repositories {
+    jcenter()
+}
+
 dependencies {
-    implementation 'com.wshunli.map:arcgis-android-tianditu:2.0.0'
+    implementation 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
 }
 ```
 
@@ -64,13 +78,9 @@ Note that OpenGL is included as a feature.
 ### Simple usage snippet
 
 ``` Java
-MapView mMapView = findViewById(R.id.mapView);
-ArcGISMap map = new ArcGISMap();
-TianDiTuLayer vec_c = new TianDiTuLayerBuilder()
-    .setLayerType(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR)
-    .build();
-map.getBasemap().getBaseLayers().add(vec_c);
-mMapView.setMap(map);
+MapView mMapView = (MapView) findViewById(R.id.map);
+TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR);
+mMapView.addLayer(vec_c);
 ```
 
 ### Cache tianditu tile layers
@@ -78,15 +88,10 @@ mMapView.setMap(map);
 Just specify the cache path
 
 ``` Java
-MapView mMapView = findViewById(R.id.mapView);
-ArcGISMap map = new ArcGISMap();
-String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
-TianDiTuLayer vec_c = new TianDiTuLayerBuilder()
-    .setLayerType(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR)
-    .setCachePath(cachePath)
-    .build();
-map.getBasemap().getBaseLayers().add(vec_c);
-mMapView.setMap(map);
+MapView mMapView = (MapView) findViewById(R.id.map);
+String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTuCache";
+TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR, cachePath);
+mMapView.addLayer(vec_c);
 ```
 
 File will be cached to the specified path
@@ -94,10 +99,6 @@ File will be cached to the specified path
 ## More
 
 Find more details about arcgis-android-tianditu in [sample](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample).
-
-## 10.X Version
-
-For ArcGIS for Android 10.2.9 and the older version in [README.10.X](README.10.X.md)
 
 ## License
 

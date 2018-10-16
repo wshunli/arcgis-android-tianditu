@@ -21,7 +21,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
@@ -44,17 +44,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'META-INF/LGPL2.1'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
+    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
+
 }
 
 // jcenter configuration for novoda's bintray-release
@@ -63,7 +59,7 @@ publish {
     userOrg = 'wshunli'
     groupId = 'com.wshunli.map'
     artifactId = 'arcgis-android-tianditu'
-    publishVersion = '1.1.0'
+    publishVersion = '2.0.0'
     desc = 'Library for displaying and caching tianditu layers based on ArcGIS for Android'
     website = 'http://www.wshunli.com/'
 }

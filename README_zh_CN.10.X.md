@@ -25,7 +25,17 @@ repositories {
 }
 dependencies {
     // Add ArcGIS Runtime SDK for Android dependency
-    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
+    implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
+}
+```
+
+Packaging 配置：
+
+```groovy
+packagingOptions {
+    exclude 'META-INF/LGPL2.1'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/NOTICE'
 }
 ```
 
@@ -36,9 +46,12 @@ dependencies {
 arcgis-android-tianditu 已经发布至 jcenter ，确定项目已配置 jcenter 仓库即可。
 
 ```groovy
-// 添加 arcgis-android-tianditu 依赖
+repositories {
+    jcenter()
+}
+    // 添加 arcgis-android-tianditu 依赖
 dependencies {
-    implementation 'com.wshunli.map:arcgis-android-tianditu:2.0.0'
+    implementation 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
 }
 ```
 
@@ -63,13 +76,9 @@ dependencies {
 ### 简单示例
 
 ``` Java
-MapView mMapView = findViewById(R.id.mapView);
-ArcGISMap map = new ArcGISMap();
-TianDiTuLayer vec_c = new TianDiTuLayerBuilder()
-    .setLayerType(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR)
-    .build();
-map.getBasemap().getBaseLayers().add(vec_c);
-mMapView.setMap(map);
+MapView mMapView = (MapView) findViewById(R.id.map);
+TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR);
+mMapView.addLayer(vec_c);
 ```
 
 ### 缓存切片
@@ -77,24 +86,15 @@ mMapView.setMap(map);
 指定缓存位置即可缓存切片。
 
 ``` Java
-MapView mMapView = findViewById(R.id.mapView);
-ArcGISMap map = new ArcGISMap();
-String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
-TianDiTuLayer vec_c = new TianDiTuLayerBuilder()
-    .setLayerType(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR)
-    .setCachePath(cachePath)
-    .build();
-map.getBasemap().getBaseLayers().add(vec_c);
-mMapView.setMap(map);
+MapView mMapView = (MapView) findViewById(R.id.map);
+String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTuCache";
+TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR, cachePath);
+mMapView.addLayer(vec_c);
 ```
 
 ## 更多
 
 更多信息可以查看 [示例](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample)
-
-## 10.X 版本
-
-针对 ArcGIS for Android 10.2.9 及以前的版本，请参考 [README_zh_CN.10.X](README_zh_CN.10.X.md)
 
 ## License
 

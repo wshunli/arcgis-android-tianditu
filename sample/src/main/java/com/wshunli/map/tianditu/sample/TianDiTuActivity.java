@@ -18,15 +18,17 @@ package com.wshunli.map.tianditu.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.esri.android.map.MapView;
-import com.esri.android.map.event.OnZoomListener;
+import com.esri.arcgisruntime.mapping.ArcGISMap;
+import com.esri.arcgisruntime.mapping.view.MapView;
 import com.wshunli.map.tianditu.TianDiTuLayer;
+import com.wshunli.map.tianditu.TianDiTuLayerBuilder;
 
 public class TianDiTuActivity extends AppCompatActivity {
     private static final String TAG = "TianDiTuActivity";
 
     private MapView mMapView;
-    private TianDiTuLayer vec_c, cva_c;
+    private TianDiTuLayer vec_c;
+    private TianDiTuLayer cva_c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,39 +40,43 @@ public class TianDiTuActivity extends AppCompatActivity {
             tianditu_layers = new int[]{0, 1};
         }
 
-        String cachePath = getCacheDir().getAbsolutePath() + "/TianDiTuCache";
-//        String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTuCache";
+        String cachePath = getCacheDir().getAbsolutePath() + "/TianDiTu100Cache";
+//        String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
 
-        mMapView = findViewById(R.id.map);
+        mMapView = findViewById(R.id.mapView);
 
-        vec_c = new TianDiTuLayer(tianditu_layers[0], cachePath);
-        mMapView.addLayer(vec_c);
-        cva_c = new TianDiTuLayer(tianditu_layers[1]);
-        mMapView.addLayer(cva_c);
+        ArcGISMap map = new ArcGISMap();
 
-        mMapView.setOnZoomListener(new OnZoomListener() {
-            @Override
-            public void preAction(float v, float v1, double v2) {
-            }
+        vec_c = new TianDiTuLayerBuilder()
+                .setLayerType(tianditu_layers[0])
+                .setCachePath(cachePath)
+                .build();
+        cva_c = new TianDiTuLayerBuilder()
+                .setLayerType(tianditu_layers[1])
+                .build();
 
-            @Override
-            public void postAction(float v, float v1, double v2) {
-                cva_c.clearTiles();
-            }
-        });
-    }
+        map.getBasemap().getBaseLayers().add(vec_c);
+        map.getBasemap().getBaseLayers().add(cva_c);
 
-    @Override
-    protected void onResume() {
-        mMapView.unpause();
-        super.onResume();
-
+        mMapView.setMap(map);
     }
 
     @Override
     protected void onPause() {
-        mMapView.pause();
         super.onPause();
+        mMapView.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMapView.dispose();
+        super.onDestroy();
     }
 
 }

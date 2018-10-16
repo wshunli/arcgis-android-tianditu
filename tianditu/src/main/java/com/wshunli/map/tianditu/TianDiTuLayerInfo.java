@@ -15,10 +15,16 @@
  */
 package com.wshunli.map.tianditu;
 
-import com.esri.core.geometry.Point;
+
+import com.esri.arcgisruntime.arcgisservices.LevelOfDetail;
+import com.esri.arcgisruntime.arcgisservices.TileInfo;
+import com.esri.arcgisruntime.geometry.Envelope;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReference;
+
+import java.util.List;
 
 public class TianDiTuLayerInfo {
-
     private String url;
     private String layerName;
 
@@ -43,6 +49,30 @@ public class TianDiTuLayerInfo {
     private Point origin;
 
     private String tileMatrixSet;
+
+    private List<LevelOfDetail> lods;
+
+    public void setLods(List<LevelOfDetail> lods) {
+        this.lods = lods;
+    }
+
+    public List<LevelOfDetail> getLods() {
+        return lods;
+    }
+
+    public TileInfo getTileInfo() {
+        return new TileInfo(getDpi(),
+                TileInfo.ImageFormat.PNG,
+                lods,
+                getOrigin(),
+                SpatialReference.create(getSrid()),
+                getTileHeight(), getTileWidth());
+    }
+
+    public Envelope getFullExtent() {
+        SpatialReference sp = SpatialReference.create(getSrid());
+        return new Envelope(xMin, yMin, xMax, yMax, sp);
+    }
 
     public String getUrl() {
         return url;
@@ -171,5 +201,4 @@ public class TianDiTuLayerInfo {
     public void setTileMatrixSet(String tileMatrixSet) {
         this.tileMatrixSet = tileMatrixSet;
     }
-
 }

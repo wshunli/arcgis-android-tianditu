@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.wshunli.map.tianditu.sample.TianDiTuActivity">
 
-    <com.esri.android.map.MapView
-        android:id="@+id/map"
+    <com.esri.arcgisruntime.mapping.view.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+    </com.esri.arcgisruntime.mapping.view.MapView>
 
 </LinearLayout>

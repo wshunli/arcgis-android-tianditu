@@ -20,7 +20,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.wshunli.map.tianditu.sample"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -32,12 +32,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    packagingOptions {
-        exclude 'META-INF/LGPL2.1'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
+    repositories {
+        flatDir {
+            dirs 'libs' //this way we can find the .aar file in libs folder
+        }
     }
+
 }
 
 dependencies {
@@ -51,8 +51,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 
-    implementation 'com.esri.arcgis.android:arcgis-android:10.2.9'
-    implementation project(':tianditu')
+    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
+//    implementation project(':tianditu')
     // arcgis-android-tianditu Dependency
-    // compile 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
+    implementation 'com.wshunli.map:arcgis-android-tianditu:2.0.0'
 }
