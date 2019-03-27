@@ -5,15 +5,13 @@
 [![Author](https://img.shields.io/badge/Author-wshunli-0E7FBF.svg)](http://www.wshunli.com)
 [![GitHub license](https://img.shields.io/github/license/wshunli/arcgis-android-tianditu.svg)](https://github.com/wshunli/arcgis-android-tianditu/blob/master/LICENSE)
 
-Library for displaying and caching tianditu layers based on ArcGIS for Android
+基于 ArcGIS for Android 的天地图图层显示及缓存
 
-[基于 ArcGIS for Android 的天地图图层显示及缓存(中文版)](README_zh_CN.md)
+## 依赖
 
-## Dependency
+### ArcGIS for Android 依赖
 
-### ArcGIS for Android Dependency
-
-Install the needed dependencies and the ArcGIS Runtime SDK for Android (ArcGIS Android SDK)  binaries from Bintray Esri repostiory.
+在使用 arcgis-android-tianditu 之前需要添加 ArcGIS 仓库 以及 ArcGIS for Android 依赖。
 
 ```groovy
 repositories {
@@ -29,7 +27,7 @@ dependencies {
 }
 ```
 
-App module build.gradle file, within android block
+Packaging 配置：
 
 ```groovy
 packagingOptions {
@@ -39,29 +37,29 @@ packagingOptions {
 }
 ```
 
-For more information : [Install and set up—ArcGIS Runtime SDK for Android](https://developers.arcgis.com/android/10-2/guide/install-and-set-up.htm)
+更多信息可参考: [ArcGIS for Android开发环境搭建](http://www.wshunli.com/posts/29ec97b7.html)
 
-### arcgis-android-tianditu Dependency
+### arcgis-android-tianditu 依赖
 
-Install arcgis-android-tianditu library.
+arcgis-android-tianditu 已经发布至 jcenter ，确定项目已配置 jcenter 仓库即可。
 
 ```groovy
 repositories {
     jcenter()
 }
-
+    // 添加 arcgis-android-tianditu 依赖
 dependencies {
     implementation 'com.wshunli.map:arcgis-android-tianditu:1.1.0'
 }
 ```
 
-Check out [arcgis-android-tianditu releases](https://github.com/wshunli/arcgis-android-tianditu/releases) to see more unstable versions.
+查看更多版本： [arcgis-android-tianditu releases](https://github.com/wshunli/arcgis-android-tianditu/releases)
 
-## Quick Start
+## 快速开始
 
-### Permission
+### 声明权限
 
-The library requires three permissions:
+除 ArcGIS for Android 三个权限外，arcgis-android-tianditu 不需要额外权限:
 
 ``` XML
 <uses-feature android:glEsVersion="0x00020000" android:required="true" />
@@ -71,11 +69,9 @@ The library requires three permissions:
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-So if you are targeting Android 6.0+, you need to handle runtime permission request before next step.
+针对 Android 6.0+ 以上版本, 注意运行时权限请求。
 
-Note that OpenGL is included as a feature.
-
-### Simple usage snippet
+### 简单示例
 
 ``` Java
 MapView mMapView = (MapView) findViewById(R.id.map);
@@ -83,9 +79,9 @@ TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCA
 mMapView.addLayer(vec_c);
 ```
 
-### Cache tianditu tile layers
+### 缓存切片
 
-Just specify the cache path
+指定缓存位置即可缓存切片。
 
 ``` Java
 MapView mMapView = (MapView) findViewById(R.id.map);
@@ -94,11 +90,9 @@ TianDiTuLayer vec_c = new TianDiTuLayer(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCA
 mMapView.addLayer(vec_c);
 ```
 
-File will be cached to the specified path
+## 更多
 
-## More
-
-Find more details about arcgis-android-tianditu in [sample](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample).
+更多信息可以查看 [示例](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample)
 
 ## License
 

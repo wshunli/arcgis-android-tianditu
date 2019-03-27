@@ -54,5 +54,5 @@ dependencies {
     implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
     implementation project(':tianditu')
     // arcgis-android-tianditu Dependency
-//    implementation 'com.wshunli.map:arcgis-android-tianditu:2.0.0'
+//    implementation 'com.wshunli.map:arcgis-android-tianditu:2.1.0'
 }

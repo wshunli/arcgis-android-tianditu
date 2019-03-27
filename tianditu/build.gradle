@@ -23,8 +23,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 3
+        versionName "2.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -59,7 +59,7 @@ publish {
     userOrg = 'wshunli'
     groupId = 'com.wshunli.map'
     artifactId = 'arcgis-android-tianditu'
-    publishVersion = '2.0.0'
+    publishVersion = '2.1.0'
     desc = 'Library for displaying and caching tianditu layers based on ArcGIS for Android'
     website = 'http://www.wshunli.com/'
 }
