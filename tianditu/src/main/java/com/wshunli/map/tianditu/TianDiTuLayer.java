@@ -16,6 +16,8 @@
 package com.wshunli.map.tianditu;
 
 
+import android.util.Log;
+
 import com.esri.arcgisruntime.arcgisservices.TileInfo;
 import com.esri.arcgisruntime.data.TileKey;
 import com.esri.arcgisruntime.geometry.Envelope;
@@ -37,6 +39,7 @@ public class TianDiTuLayer extends ImageTiledLayer {
     private int layerType = 0;
     private String cachePath = null;
     private TianDiTuLayerInfo layerInfo;
+    private String token = null;
 
     public TianDiTuLayer(TileInfo tileInfo, Envelope fullExtent) {
         super(tileInfo, fullExtent);
@@ -45,6 +48,9 @@ public class TianDiTuLayer extends ImageTiledLayer {
     @Override
     protected byte[] getTile(TileKey tileKey) {
 
+        if (this.getToken() == null) {
+            Log.e(TAG, "Please set the token value. See http://lbs.tianditu.gov.cn/authorization/authorization.html");
+        }
         int level = tileKey.getLevel();
         int col = tileKey.getColumn();
         int row = tileKey.getRow();
@@ -56,7 +62,7 @@ public class TianDiTuLayer extends ImageTiledLayer {
             bytes = getOfflineCacheFile(cachePath, level, col, row);
         if (bytes == null) {
             String url = layerInfo.getUrl()
-                    + "?service=wmts&request=gettile&version=1.0.0&layer="
+                    + "?service=wmts&request=gettile&version=1.0.0&tk=" + token + "&layer="
                     + layerInfo.getLayerName() + "&format=tiles&tilematrixset="
                     + layerInfo.getTileMatrixSet() + "&tilecol=" + col
                     + "&tilerow=" + row + "&tilematrix=" + (level);
@@ -147,5 +153,13 @@ public class TianDiTuLayer extends ImageTiledLayer {
 
     public void setCachePath(String cachePath) {
         this.cachePath = cachePath == null ? null : cachePath + "/" + layerInfo.getLayerName() + "_" + layerInfo.getTileMatrixSet() + "/";
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

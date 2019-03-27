@@ -50,9 +50,11 @@ public class TianDiTuActivity extends AppCompatActivity {
         vec_c = new TianDiTuLayerBuilder()
                 .setLayerType(tianditu_layers[0])
                 .setCachePath(cachePath)
+                .setToken("2ce94f67e58faa24beb7cb8a09780552")
                 .build();
         cva_c = new TianDiTuLayerBuilder()
                 .setLayerType(tianditu_layers[1])
+                .setToken("2ce94f67e58faa24beb7cb8a09780552")
                 .build();
 
         map.getBasemap().getBaseLayers().add(vec_c);
