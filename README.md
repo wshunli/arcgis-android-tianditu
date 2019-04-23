@@ -11,6 +11,14 @@
 :-: | :-: | :-:
 矢量 | 影像 | 地形
 
+## 天地图授权
+
+天地图于 2019年1月1日 停止对无开发许可（Key）使用应用程序开发接口或者调用在线服务的支持。
+
+http://lbs.tianditu.gov.cn/authorization/authorization.html
+
+请参考以上内容申请 token 值，以继续使用本依赖。
+
 ## 依赖
 
 ### ArcGIS for Android 依赖
@@ -62,14 +70,6 @@ dependencies {
 
 针对 Android 6.0+ 以上版本, 注意运行时权限请求。
 
-### 天地图授权
-
-天地图于 2019年1月1日 停止对无开发许可（Key）使用应用程序开发接口或者调用在线服务的支持。
-
-http://lbs.tianditu.gov.cn/authorization/authorization.html
-
-请参考以上内容申请 token 值，以继续使用本依赖。
-
 ### 简单示例
 
 ``` Java
@@ -106,7 +106,7 @@ mMapView.setMap(map);
 
 ## 10.X 版本
 
-（不推荐）针对 ArcGIS for Android 10.2.9 及以前的版本，请参考 [README_zh_CN.10.X](README_zh_CN.10.X.md) 
+（不推荐）针对 ArcGIS for Android 10.2.9 及以前的版本，请参考 [README.10.X](README.10.X.md) 
 
 
 ## License
