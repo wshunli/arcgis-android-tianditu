@@ -25,23 +25,23 @@ import java.util.List;
 
 public class LayerInfoFactory {
 
-    private static final String URL_VECTOR_2000 = "http://t0.tianditu.com/vec_c/wmts";
-    private static final String URL_VECTOR_ANNOTATION_CHINESE_2000 = "http://t0.tianditu.com/cva_c/wmts";
-    private static final String URL_VECTOR_ANNOTATION_ENGLISH_2000 = "http://t0.tianditu.com/eva_c/wmts";
-    private static final String URL_IMAGE_2000 = "http://t0.tianditu.com/img_c/wmts";
-    private static final String URL_IMAGE_ANNOTATION_CHINESE_2000 = "http://t0.tianditu.com/cia_c/wmts";
-    private static final String URL_IMAGE_ANNOTATION_ENGLISH_2000 = "http://t0.tianditu.com/cia_c/wmts";
-    private static final String URL_TERRAIN_2000 = "http://t0.tianditu.com/ter_c/wmts";
-    private static final String URL_TERRAIN_ANNOTATION_CHINESE_2000 = "http://t0.tianditu.com/cta_c/wmts";
+    private static final String URL_VECTOR_2000 = "http://t0.tianditu.gov.cn/vec_c/wmts";
+    private static final String URL_VECTOR_ANNOTATION_CHINESE_2000 = "http://t0.tianditu.gov.cn/cva_c/wmts";
+    private static final String URL_VECTOR_ANNOTATION_ENGLISH_2000 = "http://t0.tianditu.gov.cn/eva_c/wmts";
+    private static final String URL_IMAGE_2000 = "http://t0.tianditu.gov.cn/img_c/wmts";
+    private static final String URL_IMAGE_ANNOTATION_CHINESE_2000 = "http://t0.tianditu.gov.cn/cia_c/wmts";
+    private static final String URL_IMAGE_ANNOTATION_ENGLISH_2000 = "http://t0.tianditu.gov.cn/cia_c/wmts";
+    private static final String URL_TERRAIN_2000 = "http://t0.tianditu.gov.cn/ter_c/wmts";
+    private static final String URL_TERRAIN_ANNOTATION_CHINESE_2000 = "http://t0.tianditu.gov.cn/cta_c/wmts";
 
-    private static final String URL_VECTOR_MERCATOR = "http://t0.tianditu.com/vec_w/wmts";
-    private static final String URL_VECTOR_ANNOTATION_CHINESE_MERCATOR = "http://t0.tianditu.com/cva_w/wmts";
-    private static final String URL_VECTOR_ANNOTATION_ENGLISH_MERCATOR = "http://t0.tianditu.com/eva_w/wmts";
-    private static final String URL_IMAGE_MERCATOR = "http://t0.tianditu.com/img_w/wmts";
-    private static final String URL_IMAGE_ANNOTATION_CHINESE_MERCATOR = "http://t0.tianditu.com/cia_w/wmts";
-    private static final String URL_IMAGE_ANNOTATION_ENGLISH_MERCATOR = "http://t0.tianditu.com/cia_w/wmts";
-    private static final String URL_TERRAIN_MERCATOR = "http://t0.tianditu.com/ter_w/wmts";
-    private static final String URL_TERRAIN_ANNOTATION_CHINESE_MERCATOR = "http://t0.tianditu.com/cta_w/wmts";
+    private static final String URL_VECTOR_MERCATOR = "http://t0.tianditu.gov.cn/vec_w/wmts";
+    private static final String URL_VECTOR_ANNOTATION_CHINESE_MERCATOR = "http://t0.tianditu.gov.cn/cva_w/wmts";
+    private static final String URL_VECTOR_ANNOTATION_ENGLISH_MERCATOR = "http://t0.tianditu.gov.cn/eva_w/wmts";
+    private static final String URL_IMAGE_MERCATOR = "http://t0.tianditu.gov.cn/img_w/wmts";
+    private static final String URL_IMAGE_ANNOTATION_CHINESE_MERCATOR = "http://t0.tianditu.gov.cn/cia_w/wmts";
+    private static final String URL_IMAGE_ANNOTATION_ENGLISH_MERCATOR = "http://t0.tianditu.gov.cn/cia_w/wmts";
+    private static final String URL_TERRAIN_MERCATOR = "http://t0.tianditu.gov.cn/ter_w/wmts";
+    private static final String URL_TERRAIN_ANNOTATION_CHINESE_MERCATOR = "http://t0.tianditu.gov.cn/cta_w/wmts";
 
     private static final String LAYER_NAME_VECTOR = "vec";
     private static final String LAYER_NAME_VECTOR_ANNOTATION_CHINESE = "cva";
