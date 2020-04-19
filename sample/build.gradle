@@ -16,43 +16,65 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.wshunli.map.tianditu.sample"
         minSdkVersion 19
-        targetSdkVersion 21
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
+        resConfigs "zh-rCN"
+
+    }
+
+
+    signingConfigs {
+        release {
+            storeFile file(project.storeFile)
+            storePassword project.storePassword
+            keyAlias project.keyAlias
+            keyPassword project.keyPassword
+        }
     }
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            pseudoLocalesEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    repositories {
-        flatDir {
-            dirs 'libs' //this way we can find the .aar file in libs folder
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+            pseudoLocalesEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testImplementation 'junit:junit:4.12'
-
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
     implementation project(':tianditu')
     // arcgis-android-tianditu Dependency
-//    implementation 'com.wshunli.map:arcgis-android-tianditu:2.1.0'
+    // implementation 'com.wshunli.map:arcgis-android-tianditu:2.1.0'
+
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation 'junit:junit:4.12'
 }
