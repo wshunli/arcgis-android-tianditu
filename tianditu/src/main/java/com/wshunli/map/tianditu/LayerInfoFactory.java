@@ -107,7 +107,7 @@ public class LayerInfoFactory {
         lods.add(new LevelOfDetail(3, 19567.87924100512, 7.39573388636414E7));
         lods.add(new LevelOfDetail(4, 9783.93962050256, 3.69786694318207E7));
         lods.add(new LevelOfDetail(5, 4891.96981025128, 1.848933471591035E7));
-        lods.add(new LevelOfDetail(6, 72445.98490512564, 9244667.35795517));
+        lods.add(new LevelOfDetail(6, 2445.98490512564, 9244667.35795517));
         lods.add(new LevelOfDetail(7, 1222.99245256282, 4622333.678977588));
         lods.add(new LevelOfDetail(8, 611.49622628141, 2311166.839488794));
         lods.add(new LevelOfDetail(9, 305.748113140705, 1155583.419744397));
