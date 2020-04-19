@@ -36,26 +36,20 @@ public class TianDiTuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tianditu);
 
-        int[] tianditu_layers = getIntent().getIntArrayExtra("TIANDITU_LAYERS");
-        if ((tianditu_layers == null) || (tianditu_layers.length == 0)) {
-            tianditu_layers = new int[]{0, 1};
+        int[] tdtLayers = getIntent().getIntArrayExtra("TIANDITU_LAYERS");
+        if ((tdtLayers == null) || (tdtLayers.length == 0)) {
+            tdtLayers = new int[]{0, 1};
         }
-
-        String cachePath = getCacheDir().getAbsolutePath() + "/TianDiTu100Cache";
-//        String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
 
         mMapView = findViewById(R.id.mapView);
 
         ArcGISMap map = new ArcGISMap();
 
         vec_c = new TianDiTuLayerBuilder()
-                .setLayerType(tianditu_layers[0])
-                .setCachePath(cachePath)
-                .setToken("2ce94f67e58faa24beb7cb8a09780552")
+                .setLayerType(tdtLayers[0])
                 .build();
         cva_c = new TianDiTuLayerBuilder()
-                .setLayerType(tianditu_layers[1])
-                .setToken("2ce94f67e58faa24beb7cb8a09780552")
+                .setLayerType(tdtLayers[1])
                 .build();
 
         map.getBasemap().getBaseLayers().add(vec_c);

@@ -20,21 +20,9 @@ import com.esri.arcgisruntime.geometry.Envelope;
 
 public class TianDiTuLayerBuilder {
     private int layerType = 0;
-    private String cachePath = null;
-    private String token = null;
 
     public TianDiTuLayerBuilder setLayerType(int layerType) {
         this.layerType = layerType;
-        return this;
-    }
-
-    public TianDiTuLayerBuilder setCachePath(String cachePath) {
-        this.cachePath = cachePath;
-        return this;
-    }
-
-    public TianDiTuLayerBuilder setToken(String token) {
-        this.token = token;
         return this;
     }
 
@@ -44,8 +32,6 @@ public class TianDiTuLayerBuilder {
         Envelope fullExtent = layerInfo.getFullExtent();
         TianDiTuLayer tianDiTuLayer = new TianDiTuLayer(tileInfo, fullExtent);
         tianDiTuLayer.setLayerType(layerType);
-        tianDiTuLayer.setCachePath(cachePath);
-        tianDiTuLayer.setToken(token);
         return tianDiTuLayer;
     }
 }

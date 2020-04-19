@@ -23,7 +23,7 @@ import com.esri.arcgisruntime.geometry.SpatialReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LayerInfoFactory {
+class LayerInfoFactory {
 
     private static final String URL_VECTOR_2000 = "https://t0.tianditu.gov.cn/vec_c/wmts";
     private static final String URL_VECTOR_ANNOTATION_CHINESE_2000 = "https://t0.tianditu.gov.cn/cva_c/wmts";

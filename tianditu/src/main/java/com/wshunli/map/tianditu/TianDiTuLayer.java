@@ -37,9 +37,9 @@ public class TianDiTuLayer extends ImageTiledLayer {
     private static final String TAG = "TianDiTuLayer";
 
     private int layerType = 0;
-    private String cachePath = null;
     private TianDiTuLayerInfo layerInfo;
-    private String token = null;
+    private String token = getToken();
+    private String cachePath = getCachePath();
 
     public TianDiTuLayer(TileInfo tileInfo, Envelope fullExtent) {
         super(tileInfo, fullExtent);
@@ -48,14 +48,10 @@ public class TianDiTuLayer extends ImageTiledLayer {
     @Override
     protected byte[] getTile(TileKey tileKey) {
 
-        if (this.getToken() == null) {
-            Log.e(TAG, "Please set the token value. See http://lbs.tianditu.gov.cn/authorization/authorization.html");
-        }
         int level = tileKey.getLevel();
         int col = tileKey.getColumn();
         int row = tileKey.getRow();
-        if (level > layerInfo.getMaxZoomLevel()
-                || level < layerInfo.getMinZoomLevel())
+        if (level > layerInfo.getMaxZoomLevel() || level < layerInfo.getMinZoomLevel())
             return new byte[0];
         byte[] bytes = null;
         if (cachePath != null)
@@ -147,19 +143,13 @@ public class TianDiTuLayer extends ImageTiledLayer {
         this.layerInfo = LayerInfoFactory.getLayerInfo(layerType);
     }
 
-    public String getCachePath() {
-        return cachePath;
+    private String getToken() {
+        return TianDiTuInitialer.getInstance().getToken();
     }
 
-    public void setCachePath(String cachePath) {
-        this.cachePath = cachePath == null ? null : cachePath + "/" + layerInfo.getLayerName() + "_" + layerInfo.getTileMatrixSet() + "/";
+    private String getCachePath() {
+        String initPath = TianDiTuInitialer.getInstance().getCachePath();
+        return cachePath == null ? null : cachePath + "/" + layerInfo.getLayerName() + "_" + layerInfo.getTileMatrixSet() + "/";
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

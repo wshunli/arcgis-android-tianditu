@@ -24,7 +24,7 @@ import com.esri.arcgisruntime.geometry.SpatialReference;
 
 import java.util.List;
 
-public class TianDiTuLayerInfo {
+class TianDiTuLayerInfo {
     private String url;
     private String layerName;
 
