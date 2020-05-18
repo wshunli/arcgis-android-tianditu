@@ -70,37 +70,68 @@ dependencies {
 
 针对 Android 6.0+ 以上版本, 注意运行时权限请求。
 
+### 初始化
+
+``` Java
+// 初始化
+TianDiTuLayer.getInstance().init(this, "TDT_KEY");
+```
+
+建议在 Application 实现类中初始化，比如：
+
+``` Java
+public class App extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // 简单初始化
+        TianDiTuLayer.getInstance().init(this, "TDT_KEY");
+    }
+}
+```
+
 ### 简单示例
 
 ``` Java
 MapView mMapView = findViewById(R.id.mapView);
-ArcGISMap map = new ArcGISMap();
-TianDiTuLayer vec_c = new TianDiTuLayerBuilder()
-    .setLayerType(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR)
-    .setToken("2ce94f67e58faa24beb7cb8a09780552")
-    .build();
-map.getBasemap().getBaseLayers().add(vec_c);
-mMapView.setMap(map);
+WebTiledLayer webTiledLayer = TianDiTuLayer.getInstance().getLayer(
+        TianDiTuLayerType.VECTOR,
+        TianDiTuLayerType.SR.ID_2000
+);
+Basemap basemap = new Basemap(webTiledLayer);
+mMapView.setMap(new ArcGISMap(basemap));
 ```
 
 ### 缓存切片
 
-指定缓存位置即可缓存切片。
+暂不支持
 
-``` Java
-MapView mMapView = findViewById(R.id.mapView);
-ArcGISMap map = new ArcGISMap();
-String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
-TianDiTuLayer vec_c = new TianDiTuLayerBuilder()
-    .setLayerType(TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR)
-    .setCachePath(cachePath)
-    .setToken("2ce94f67e58faa24beb7cb8a09780552")
-    .build();
-map.getBasemap().getBaseLayers().add(vec_c);
-mMapView.setMap(map);
-```
+## 支持图层类型
 
-## 更多
+支持切片图层：
+
+切片类型 | 对应字段 | 
+:-: | :-: 
+矢量切片图层 | TianDiTuLayerType.VECTOR 
+影像切片图层 | TianDiTuLayerType.IMAGE 
+地形切片图层 | TianDiTuLayerType.TERRAIN 
+
+支持标注图层：
+
+切片类型 | 对应中文标注 | 对应英文标注 | 
+:-: | :-: | :-: 
+矢量图层 | 中文标注字段 | 英文标注字段 | 
+矢量切片图层 | TianDiTuLayerType.VECTOR_ANNOTATION_CN | TianDiTuLayerType.VECTOR_ANNOTATION_CN
+影像切片图层 | TianDiTuLayerType.IMAGE_ANNOTATION_CN | TianDiTuLayerType.IMAGER_ANNOTATION_CN
+地形切片图层 | TianDiTuLayerType.TERRAIN_ANNOTATION_CN | 暂不支持
+
+支持坐标系：
+
+坐标系类型 | 对应字段 | 
+:-: | :-: 
+国家 2000 坐标系 | TianDiTuLayerType.SR.ID_2000
+墨卡托投影 | TianDiTuLayerType.SR.ID_1021000
+
 
 更多信息可以查看 [示例](https://github.com/wshunli/arcgis-android-tianditu/tree/master/sample)
 
