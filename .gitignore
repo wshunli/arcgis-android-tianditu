@@ -45,7 +45,7 @@ captures/
 
 
 # Keystore files
-*.jks
+# *.jks
 
 .project
 sample/.project
