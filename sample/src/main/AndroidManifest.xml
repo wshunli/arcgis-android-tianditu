@@ -8,7 +8,6 @@
 
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -23,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TianDiTuActivity" />
     </application>
 
 </manifest>

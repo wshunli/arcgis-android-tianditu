@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">arcgis-android-tianditu</string>
-    <string name="map_name">天地图矢量中文标注（墨卡托）</string>
+    <string name="select_layer">选择图层（矢量、影像、地形）</string>
+    <string name="select_layer_vec">矢量切片图层</string>
+    <string name="select_layer_img">影像切片图层</string>
+    <string name="select_layer_ter">地形切片图层</string>
+    <string name="select_sr">切换坐标系（国家 2000 、墨卡托投影）</string>
+    <string name="select_lng">切换语言（中文标注 、英文标注）</string>
 </resources>

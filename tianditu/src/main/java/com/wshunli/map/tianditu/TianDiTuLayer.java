@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 wshunli
+ * Copyright 2020 wshunli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,97 +15,115 @@
  */
 package com.wshunli.map.tianditu;
 
+import android.content.Context;
+import android.util.Log;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.FutureTarget;
 import com.esri.arcgisruntime.arcgisservices.TileInfo;
-import com.esri.arcgisruntime.data.TileKey;
-import com.esri.arcgisruntime.geometry.Envelope;
-import com.esri.arcgisruntime.layers.ImageTiledLayer;
+import com.esri.arcgisruntime.io.RequestConfiguration;
+import com.esri.arcgisruntime.layers.WebTiledLayer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.ExecutionException;
-
-public class TianDiTuLayer extends ImageTiledLayer {
+public class TianDiTuLayer {
 
     private static final String TAG = "TianDiTuLayer";
 
-    private TianDiTuLayerInfo layerInfo;
-    private String token = getToken();
-    // private String cachePath = getCachePath();
-    private StringBuffer tileUrlBuffer = new StringBuffer();
+    private Context context = null;
+    private String key = null;
+    private String cachePath = null;
 
-    public TianDiTuLayer(TileInfo tileInfo, Envelope fullExtent) {
-        super(tileInfo, fullExtent);
+    private TianDiTuLayer() {
     }
 
-    @Override
-    protected byte[] getTile(TileKey tileKey) {
+    private volatile static TianDiTuLayer instance = null;
 
-        int level = tileKey.getLevel();
-        int col = tileKey.getColumn();
-        int row = tileKey.getRow();
-        if (level > layerInfo.getMaxZoomLevel() || level < layerInfo.getMinZoomLevel())
-            return new byte[0];
-        byte[] bytes = null;
-
-        tileUrlBuffer.append(layerInfo.getUrl())
-                .append("?service=wmts&request=gettile&version=1.0.0&tk=").append(token)
-                .append("&layer=").append(layerInfo.getLayerName())
-                .append("&format=tiles&tilematrixset=").append(layerInfo.getTileMatrixSet())
-                .append("&tilecol=").append(col)
-                .append("&tilerow=").append(row)
-                .append("&tilematrix=").append(level);
-
-        FutureTarget<File> submit = Glide
-                .with(TianDiTuInitialer.getInstance().getContext())
-                .asFile()
-                .load(tileUrlBuffer.toString())
-                .submit();
-        tileUrlBuffer.setLength(0);
-
-        try {
-            File file = submit.get();
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                bytes = getBytes(inputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
+    public static TianDiTuLayer getInstance() {
+        if (instance == null) {
+            synchronized (TianDiTuLayer.class) {
+                if (instance == null) {
+                    instance = new TianDiTuLayer();
+                }
             }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
         }
-        return bytes;
+        return instance;
     }
 
-    // 读取字节数组
-    private byte[] getBytes(InputStream is) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-        byte[] temp = new byte[1024];
-        int size;
-        while ((size = is.read(temp)) != -1) {
-            out.write(temp, 0, size);
+    // 初始化
+    public void init(Context context, String key) {
+        if (context == null || key == null || key.isEmpty()) {
+            throw new NullPointerException();
         }
-        is.close();
-        out.flush();
-        return out.toByteArray();
+        this.init(context, key, getDefaultCachePath(context));
     }
 
-    void setLayerType(int layerType) {
-        this.layerInfo = LayerInfoFactory.getLayerInfo(layerType);
+    // 初始化
+    public void init(Context context, String key, String cachePath) {
+        if (context == null) {
+            Log.e(TAG, "context is null, please check it");
+            throw new NullPointerException();
+        }
+        if (key == null || key.isEmpty()) {
+            Log.e(TAG, "Please set the key value. See http://lbs.tianditu.gov.cn/authorization/authorization.html");
+            throw new NullPointerException();
+        }
+        if (cachePath == null || cachePath.isEmpty()) {
+            Log.w(TAG, "cachePath is null or empty , set default value");
+            cachePath = getDefaultCachePath(context);
+        }
+        this.context = context;
+        this.key = key;
+        this.cachePath = cachePath;
+        Log.i(TAG, "init key: " + key);
+    }
+
+    /**
+     * 获取 WebTiledLayer 图层
+     *
+     * @param layerType        天地图图层类型
+     * @param spatialReference 天地图坐标系
+     * @return ArcGIS Android 对应图层
+     */
+    public WebTiledLayer getLayer(TianDiTuLayerType layerType, TianDiTuLayerType.SR spatialReference) {
+
+        if (layerType == null) {
+            Log.e(TAG, "layerType is null, please check it");
+            throw new NullPointerException();
+        }
+
+        if (spatialReference == null) {
+            Log.e(TAG, "spatialReference is null, please check it");
+            throw new NullPointerException();
+        }
+
+        // 图层信息
+        String templateUri = layerType.getTemplateUri(spatialReference);
+        TileInfo tileInfo = layerType.getTileInfo(spatialReference);
+        // 创建图层
+        WebTiledLayer webTiledLayer = new WebTiledLayer(
+                templateUri + "&tk=" + key,
+                TianDiTuLayerConstants.SUB_DOMAIN,
+                tileInfo,
+                spatialReference.getEnvelope());
+        webTiledLayer.setName(layerType.getValue() + "_" + spatialReference.getValue());
+        // 配置请求头
+        RequestConfiguration requestConfiguration = new RequestConfiguration();
+        requestConfiguration.getHeaders().put("referer", "https://www.tianditu.gov.cn/");
+        webTiledLayer.setRequestConfiguration(requestConfiguration);
+        return webTiledLayer;
+    }
+
+    private Context getContext() {
+        return context;
     }
 
     private String getToken() {
-        return TianDiTuInitialer.getInstance().getToken();
+        return key;
     }
 
     private String getCachePath() {
-        String initPath = TianDiTuInitialer.getInstance().getCachePath();
-        return initPath + "/" + layerInfo.getLayerName() + "_" + layerInfo.getTileMatrixSet() + "/";
+        return cachePath;
+    }
+
+    private String getDefaultCachePath(Context context) {
+        return context.getCacheDir().getAbsolutePath() + "/tdt";
     }
 
 }

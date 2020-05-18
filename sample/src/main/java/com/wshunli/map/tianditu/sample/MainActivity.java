@@ -15,135 +15,168 @@
  */
 package com.wshunli.map.tianditu.sample;
 
-import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.wshunli.map.tianditu.TianDiTuLayerTypes;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import com.esri.arcgisruntime.layers.WebTiledLayer;
+import com.esri.arcgisruntime.mapping.ArcGISMap;
+import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.view.MapView;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.impl.BottomListPopupView;
+import com.lxj.xpopup.impl.CenterListPopupView;
+import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.wshunli.map.tianditu.TianDiTuLayer;
+import com.wshunli.map.tianditu.TianDiTuLayerType;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private MapView mMapView;
+
+    private TianDiTuLayerType mLayerType = TianDiTuLayerType.VECTOR;
+    private TianDiTuLayerType.SR mSRType = TianDiTuLayerType.SR.ID_2000;
+    private boolean mIsCN = true;
+    private BottomListPopupView selectPopupView = null;
+    private CenterListPopupView layerPopupView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mMapView = findViewById(R.id.mapView);
 
-        initData();
-        initView();
-
+        updateMap();
     }
 
-    private void initData() {
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mAdapter = new MapsAdapter(getData());
+    public void updateMap() {
+        addBaseMapLayer(mLayerType, mSRType);
+        updateAnnotationLayer(mIsCN);
     }
 
-    private void initView() {
-        mRecyclerView = findViewById(R.id.maps);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+    // 添加底图
+    private void addBaseMapLayer(TianDiTuLayerType layerType, TianDiTuLayerType.SR srType) {
+        Log.d(TAG, "addBaseMapLayer: " + layerType.name() + "-" + srType.name());
+        WebTiledLayer webTiledLayer = TianDiTuLayer.getInstance().getLayer(layerType, srType);
+        // 加载图层
+        webTiledLayer.loadAsync();
+        Basemap basemap = new Basemap(webTiledLayer);
+        mMapView.setMap(new ArcGISMap(basemap));
     }
 
-    public Map<String, int[]> getData() {
-        Map<String, int[]> maps = new TreeMap<>();
-        maps.put("天地图矢量中文标注（墨卡托）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR,
-                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_CHINESE_MERCATOR});
-        maps.put("天地图矢量英文标注（墨卡托）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_MERCATOR,
-                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_ENGLISH_MERCATOR});
-        maps.put("天地图影像中文标注（墨卡托）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_MERCATOR,
-                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_CHINESE_MERCATOR});
-        maps.put("天地图影像英文标注（墨卡托）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_MERCATOR,
-                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_ENGLISH_MERCATOR});
-        maps.put("天地图地形中文标注（墨卡托）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_TERRAIN_MERCATOR,
-                        TianDiTuLayerTypes.TIANDITU_TERRAIN_ANNOTATION_CHINESE_MERCATOR});
-        maps.put("天地图矢量中文标注（国家2000坐标系）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_2000,
-                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_CHINESE_2000});
-        maps.put("天地图矢量英文标注（国家2000坐标系）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_VECTOR_2000,
-                        TianDiTuLayerTypes.TIANDITU_VECTOR_ANNOTATION_ENGLISH_2000});
-        maps.put("天地图影像中文标注（国家2000坐标系）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_2000,
-                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_CHINESE_2000});
-        maps.put("天地图影像英文标注（国家2000坐标系）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_IMAGE_2000,
-                        TianDiTuLayerTypes.TIANDITU_IMAGE_ANNOTATION_ENGLISH_2000});
-        maps.put("天地图地形中文标注（国家2000坐标系）",
-                new int[]{TianDiTuLayerTypes.TIANDITU_TERRAIN_2000,
-                        TianDiTuLayerTypes.TIANDITU_TERRAIN_ANNOTATION_CHINESE_2000});
-        return maps;
+    // 添加标注
+    private void updateAnnotationLayer(boolean isCN) {
+        Log.d(TAG, "updateAnnotationLayer: " + isCN);
+        TianDiTuLayerType annotationType = null;
+        switch (mLayerType) {
+            case VECTOR:
+                annotationType = isCN ? TianDiTuLayerType.VECTOR_ANNOTATION_CN : TianDiTuLayerType.VECTOR_ANNOTATION_EN;
+                break;
+            case IMAGE:
+                annotationType = isCN ? TianDiTuLayerType.IMAGE_ANNOTATION_CN : TianDiTuLayerType.IMAGE_ANNOTATION_EN;
+                break;
+            case TERRAIN:
+                annotationType = isCN ? TianDiTuLayerType.TERRAIN_ANNOTATION_CN : null;
+                break;
+        }
+        if (annotationType == null) {
+            Toast.makeText(this, "暂不支持此标注", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        WebTiledLayer annotationTiledLayer = TianDiTuLayer.getInstance().getLayer(annotationType, mSRType);
+
+        // 加载图层
+        annotationTiledLayer.loadAsync();
+        Basemap basemap = mMapView.getMap().getBasemap();
+        basemap.getBaseLayers().add(annotationTiledLayer);
     }
 
-    private class MapsAdapter extends RecyclerView.Adapter<MapsAdapter.TextViewHolder> {
-        Map<String, int[]> maps = new TreeMap<>();
-        List<String> titles = new LinkedList<>();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.resume();
+    }
 
-        MapsAdapter(Map<String, int[]> maps) {
-            this.maps = maps;
-            titles.addAll(maps.keySet());
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMapView.dispose();
+        super.onDestroy();
+    }
+
+    // 选择操作
+    public void showPopMenu(View view) {
+
+        if (selectPopupView == null) {
+            selectPopupView = new XPopup.Builder(this)
+                    .asBottomList("请选择操作",
+                            new String[]{"选择图层（矢量、影像、地形）", "切换坐标系（国家 2000 、墨卡托投影）", "切换语言（中文标注 、英文标注）"},
+                            new OnSelectListener() {
+                                @Override
+                                public void onSelect(int position, String text) {
+                                    Log.d(TAG, "onSelect: " + text);
+                                    Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+                                    switch (position) {
+                                        case 0:
+                                            showLayerPopMenu();
+                                            break;
+                                        case 1:
+                                            mSRType = mSRType == TianDiTuLayerType.SR.ID_2000 ?
+                                                    TianDiTuLayerType.SR.ID_102100 : TianDiTuLayerType.SR.ID_2000;
+                                            updateMap();
+                                            break;
+                                        case 2:
+                                            mIsCN = !mIsCN;
+                                            updateMap();
+                                            break;
+                                        default:
+                                            Log.w(TAG, "onSelect: " + text + "not support");
+                                    }
+                                }
+                            });
         }
 
-        @Override
-        public MapsAdapter.TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_map, parent, false);
-            return new TextViewHolder(view);
+        selectPopupView.show();
+    }
+
+    // 选择图层
+    private void showLayerPopMenu() {
+        if (layerPopupView == null) {
+            layerPopupView = new XPopup.Builder(this)
+                    .asCenterList("请选择图层",
+                            new String[]{"矢量切片图层", "影像切片图层", "地形切片图层"},
+                            new OnSelectListener() {
+                                @Override
+                                public void onSelect(int position, String text) {
+                                    Log.d(TAG, "onSelect: " + text);
+                                    Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+                                    switch (position) {
+                                        case 0:
+                                            mLayerType = TianDiTuLayerType.VECTOR;
+                                            break;
+                                        case 1:
+                                            mLayerType = TianDiTuLayerType.IMAGE;
+                                            break;
+                                        case 2:
+                                            mLayerType = TianDiTuLayerType.TERRAIN;
+                                            break;
+                                        default:
+                                            Log.w(TAG, "onSelect: " + text + "not support");
+                                    }
+                                    updateMap();
+                                }
+                            });
         }
-
-        @Override
-        public void onBindViewHolder(MapsAdapter.TextViewHolder holder, int position) {
-            holder.map_title.setText(titles.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return maps.size();
-        }
-
-        class TextViewHolder extends RecyclerView.ViewHolder {
-
-            Button map_title;
-
-            TextViewHolder(View itemView) {
-                super(itemView);
-                map_title = itemView.findViewById(R.id.map_title);
-                map_title.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String title = (String) map_title.getText();
-                        int[] layers = maps.get(
-                                maps.containsKey(title) ? title : "天地图矢量中文标注（墨卡托）");
-                        Log.d(TAG, "显示图层: " + title);
-                        Intent intent = new Intent(MainActivity.this, TianDiTuActivity.class);
-                        intent.putExtra("TIANDITU_LAYERS", layers);
-                        startActivity(intent);
-                    }
-                });
-            }
-        }
+        layerPopupView.show();
     }
 }

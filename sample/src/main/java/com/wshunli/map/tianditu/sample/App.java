@@ -17,18 +17,29 @@ package com.wshunli.map.tianditu.sample;
 
 import android.app.Application;
 
-import com.wshunli.map.tianditu.TianDiTuInitialer;
+import com.wshunli.map.tianditu.TianDiTuLayer;
 
 public class App extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // 初始化
-        TianDiTuInitialer.getInstance().init(this, "TDT_KEY");
 
+        /*
+          TODO： 请将 TDT_KEY 替换为自己申请的 key
+          http://lbs.tianditu.gov.cn/authorization/authorization.html
+         */
+
+        // 简单初始化
+        TianDiTuLayer.getInstance().init(this, "TDT_KEY");
+
+        // 设置缓存路径
 //        String cachePath = getCacheDir().getAbsolutePath() + "/TianDiTu100Cache";
-//        // String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
-//        TianDiTuInitialer.getInstance().init(this, "TDT_KEY", cachePath);
+        // 注意权限处理
+//        String cachePath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/TianDiTu100Cache";
+        // 设置缓存路径
+//        TianDiTuLayer.getInstance().init(this, "TDT_KEY", cachePath);
+
     }
+
 }

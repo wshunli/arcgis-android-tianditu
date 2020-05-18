@@ -16,11 +16,13 @@
 #   public *;
 #}
 
--dontwarn com.esri.**
--keep class com.esri.** {*;}
+# ArcGIS Android
+-keep class com.esri.** { *; }
+-keep interface com.esri.** { *; }
+-keep class org.codehaus.jackson.** { *; }
+-dontwarn org.codehaus.jackson.map.ext.**
+-dontwarn jcifs.http.**
 
--dontwarn org.codehaus.jackson.**
--keep class org.codehaus.jackson.** {*;}
-
--dontwarn jcifs.**
--keep class jcifs.** {*;}
+# XPopup
+-dontwarn com.lxj.xpopup.widget.**
+-keep class com.lxj.xpopup.widget.**{*;}
