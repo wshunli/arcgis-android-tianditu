@@ -48,7 +48,7 @@ arcgis-android-tianditu 已经发布至 jcenter ，确定项目已配置 jcenter
 ```groovy
 // 添加 arcgis-android-tianditu 依赖
 dependencies {
-    implementation 'com.wshunli.map:arcgis-android-tianditu:2.1.0'
+    implementation 'com.wshunli.map:arcgis-android-tianditu:2.2.0'
 }
 ```
 
@@ -120,7 +120,6 @@ mMapView.setMap(new ArcGISMap(basemap));
 
 切片类型 | 对应中文标注 | 对应英文标注 | 
 :-: | :-: | :-: 
-矢量图层 | 中文标注字段 | 英文标注字段 | 
 矢量切片图层 | TianDiTuLayerType.VECTOR_ANNOTATION_CN | TianDiTuLayerType.VECTOR_ANNOTATION_CN
 影像切片图层 | TianDiTuLayerType.IMAGE_ANNOTATION_CN | TianDiTuLayerType.IMAGER_ANNOTATION_CN
 地形切片图层 | TianDiTuLayerType.TERRAIN_ANNOTATION_CN | 暂不支持
