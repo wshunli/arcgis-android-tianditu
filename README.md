@@ -48,7 +48,7 @@ arcgis-android-tianditu 已经发布至 jcenter ，确定项目已配置 jcenter
 ```groovy
 // 添加 arcgis-android-tianditu 依赖
 dependencies {
-    implementation 'com.wshunli.map:arcgis-android-tianditu:2.2.0'
+    implementation 'com.wshunli.map:arcgis-android-tianditu:2.2.1'
 }
 ```
 

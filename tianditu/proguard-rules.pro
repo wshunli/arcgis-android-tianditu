@@ -24,6 +24,8 @@
 -dontwarn jcifs.http.**
 
 # Tianditu
--keep class com.wshunli.map.tianditu.TianDiTuLayer { *;}
--keep class com.wshunli.map.tianditu.TianDiTuLayerTypes { *;}
--keep class com.wshunli.map.tianditu.TianDiTuLayerConstants { *;}
+-keep class com.wshunli.map.tianditu.* { *;}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}

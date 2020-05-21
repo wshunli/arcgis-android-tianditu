@@ -57,7 +57,7 @@ publish {
     userOrg = 'wshunli'
     groupId = 'com.wshunli.map'
     artifactId = 'arcgis-android-tianditu'
-    publishVersion = '2.2.0'
+    publishVersion = '2.2.1'
     desc = 'Library for displaying and caching tianditu layers based on ArcGIS for Android'
     website = 'http://www.wshunli.com/'
 }

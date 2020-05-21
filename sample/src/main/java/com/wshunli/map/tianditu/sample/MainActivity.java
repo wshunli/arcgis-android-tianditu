@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMapView = findViewById(R.id.mapView);
+        mMapView.setAttributionTextVisible(false);
 
         updateMap();
     }

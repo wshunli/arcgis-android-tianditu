@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
     implementation project(':tianditu')
     // arcgis-android-tianditu Dependency
-    // implementation 'com.wshunli.map:arcgis-android-tianditu:2.1.0'
+    // implementation 'com.wshunli.map:arcgis-android-tianditu:2.2.1'
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
